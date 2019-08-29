@@ -78,6 +78,8 @@ mraa_arm_platform()
             platform_type = MRAA_96BOARDS;
         else if (mraa_file_contains("/proc/device-tree/compatible", "arrow,apq8096-db820c"))
             platform_type = MRAA_96BOARDS;
+        else if (mraa_file_contains("/proc/device-tree/compatible", "thundercomm,db845"))
+            platform_type = MRAA_96BOARDS;
         else if (mraa_file_contains("/proc/device-tree/model",
                                     "HiKey Development Board"))
             platform_type = MRAA_96BOARDS;

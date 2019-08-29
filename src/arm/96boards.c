@@ -22,6 +22,7 @@
 #define PLATFORM_NAME_BBGUM "BBGUM"
 #define PLATFORM_NAME_DB410C "DB410C"
 #define PLATFORM_NAME_DB820C "DB820C"
+#define PLATFORM_NAME_RB3 "RB3"
 #define PLATFORM_NAME_HIKEY "HIKEY"
 #define PLATFORM_NAME_HIKEY960 "HIKEY960"
 #define PLATFORM_NAME_ROCK960 "ROCK960"
@@ -61,6 +62,10 @@ int db820c_chardev_map[MRAA_96BOARDS_LS_GPIO_COUNT][2] = {
 };
 
 const char* db820c_serialdev[MRAA_96BOARDS_LS_UART_COUNT] = { "/dev/ttyMSM0", "/dev/ttyMSM1" };
+
+// RB3
+
+//TODO: Add chardev map, led and uart as and when enabled in device-tree
 
 // HiKey
 int hikey_ls_gpio_pins[MRAA_96BOARDS_LS_GPIO_COUNT] = {
@@ -269,6 +274,8 @@ mraa_96boards()
             b->uart_dev[0].device_path = (char*) db820c_serialdev[0];
             b->uart_dev[1].device_path = (char*) db820c_serialdev[1];
             b->chardev_capable = 1;
+        } else if (mraa_file_contains(DT_BASE "/model", "Thundercomm Dragonboard 845c")) {
+            b->platform_name = PLATFORM_NAME_RB3;
         } else if (mraa_file_contains(DT_BASE "/model", "HiKey Development Board")) {
             b->platform_name = PLATFORM_NAME_HIKEY;
             ls_gpio_pins = hikey_ls_gpio_pins;
@@ -317,6 +324,11 @@ mraa_96boards()
         b->def_i2c_bus = 0;
         b->i2c_bus[0].bus_id = 2;
         b->i2c_bus[1].bus_id = 3;
+    } else if (strncmp(b->platform_name, PLATFORM_NAME_RB3, MAX_SIZE) == 0) {
+        b->i2c_bus_count = MRAA_96BOARDS_LS_I2C_COUNT;
+        b->def_i2c_bus = 0;
+        b->i2c_bus[0].bus_id = 11;
+        b->i2c_bus[1].bus_id = 14;
     } else {
         b->i2c_bus_count = MRAA_96BOARDS_LS_I2C_COUNT;
         b->def_i2c_bus = 0;
